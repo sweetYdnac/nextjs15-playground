@@ -1,18 +1,22 @@
+import { RawObject } from '@/global/types'
 import { ReactNode } from 'react'
 import { StoreApi } from 'zustand'
 
-export type CreateZustandStoreFunc<T extends object> = (
+export type CreateZustandStoreFunc<T extends RawObject> = (
   initialState: Partial<T>
 ) => StoreApi<T>
 
-export type ZustandProvider<T extends object> = {
+export type ZustandProvider<T extends RawObject> = {
   children: ReactNode
   initialValue: Partial<T>
 }
 
-export type CreateZustandContext = <T extends object>(
+export type CreateZustandContext = <T extends RawObject>(
   getStore: CreateZustandStoreFunc<T>
 ) => {
   Provider: (props: ZustandProvider<T>) => ReactNode
-  useStore: <U>(selector: (state: T) => U) => U
+  useStore: {
+    (): T
+    <U = T>(selector: (state: T) => U): U
+  }
 }
